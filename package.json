@@ -1,0 +1,36 @@
+{
+  "name": "simple-login",
+  "version": "1.0.0",
+  "description": "This project is built purely for practice and learning purposes.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aayushdai/simple-login-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Aayushdai/simple-login-js/issues"
+  },
+  "homepage": "https://github.com/Aayushdai/simple-login-js#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-redis": "^10.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.24.6",
+    "redis": "^6.3.1",
+    "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
