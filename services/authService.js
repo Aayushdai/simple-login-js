@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import { redisClient } from "../config/redis.js";
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js";
 
 export const registerUser = async (userData) => {
@@ -29,6 +30,8 @@ export const registerUser = async (userData) => {
         password: hashedPassword,
     });
 
+    await redisClient.del("users");
+
     return {
         id: newUser.id,
         firstName: newUser.firstName,
@@ -37,6 +40,7 @@ export const registerUser = async (userData) => {
         email:newUser.email,
         role: newUser.role
     }
+
 }
 
 export const loginUser = async ({email, password}) => {

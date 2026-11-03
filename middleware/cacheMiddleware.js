@@ -11,17 +11,22 @@ export const cacheMiddleware = (key, expiration = 60) => {
         }
         console.log("Cache MISS");
 
-        const originalJSON = res.json.bind(res);
+        // const originalJSON = res.json.bind(res);
 
-        res.json = (data) => {
-            redisClient
-            .setEx(key, expiration, JSON.stringify(data))
-            .catch((error) => {
-                console.error("Cache storage error:", error.message);
+        // res.json = (data) => {
+        //     redisClient
+        //     .setEx(key, expiration, JSON.stringify(data))
+        //     .catch((error) => {
+        //         console.error("Cache storage error:", error.message);
 
-            });
-            return originalJSON(data);
-        };
+        //     });
+        //     return originalJSON(data);
+        // };
+        console.log("Cache MISS");
+
+        res.locals.cacheKey = key;
+        res.locals.cacheExpiration = expiration;
+
         next();
     }catch(error) {
         console.error("Redis cache error:", error.message);
