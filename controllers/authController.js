@@ -1,7 +1,7 @@
-import { registerUser, loginUser } from "../services/authService.js";
+import { registerUser, loginUser, logoutUser } from "../services/authService.js";
 import logger from "../config/logger.js";
 
-export const register = async (req,res) => {
+export const register = async (req,res, next) => {
     try {
         const user = await registerUser(req.body);
 
@@ -11,35 +11,18 @@ export const register = async (req,res) => {
             user
         });
     }catch (error) {
-        const statusCode =
-        error.message === "Email already registered" ? 409 : 500;
-
-        return res.status(statusCode).json({
-            success: false,
-            message: error.message
-        });
+        next(error);
     }
 }
 
-export const login = async (req,res) => {
+export const login = async (req,res, next) => {
     try {
         const user = await loginUser(req.body);
 
-        if(!user) {
-            return res.status(401).json({
-                success: false,
-                message: "Invalid email or password"
-            });
-        }
-
         req.session.regenerate((error) => {
             if(error){
-                return res.status(500).json({
-                    success: false,
-                    message: "Session creation failed"
-                })
- 
-            }
+                next(error);
+             }
  
         req.session.user = {
             id: user.id,
@@ -49,10 +32,7 @@ export const login = async (req,res) => {
         
         req.session.save((error) => {
             if(error) {
-                return res.status(500).json({
-                    success: false,
-                    message: "Session saving failed"
-                });
+                return next(error);
             }
             return res.status(200).json({
             success: true,
@@ -63,11 +43,8 @@ export const login = async (req,res) => {
         
         });        
     } catch (error) {
-        logger.error("Login error:", error);
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
+       next(error);
+        
     }
 }
 
@@ -76,4 +53,16 @@ export const getCurrentUser = (req, res) => {
         success: true,
         user: req.session.user
     });
+};
+
+export const logout = async (req, res, next) => {
+    try {
+        await logoutUser(req);
+        return res.status(200).json({
+            success: true,
+            message: "Logout successful"
+        });
+    }catch (error) {
+        next(error);
+    }
 };

@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import { redisClient } from "../config/redis.js";
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js";
-
+import AppError from "../utils/AppError.js";
 
 export const registerUser = async (userData) => {
     const {
@@ -18,7 +18,7 @@ export const registerUser = async (userData) => {
     });
 
     if(existingUser) {
-        throw new Error("Email already registered");
+        throw new AppError("Email already registered", 409);
     }
 
     const hashedPassword = await hashPassword(password);
@@ -50,8 +50,7 @@ export const loginUser = async ({email, password}) => {
     });
 
     if(!user) {
-        return null;
-    }
+throw new AppError("Invalid email or password", 401);    }
 
     const isPasswordValid = await comparePassword(
         password,
@@ -59,8 +58,7 @@ export const loginUser = async ({email, password}) => {
     );
 
     if(!isPasswordValid) {
-        return null;
-    }
+throw new AppError("Invalid email or password", 401);    }
 
     return {
         id: user.id,
@@ -70,4 +68,15 @@ export const loginUser = async ({email, password}) => {
         phoneNumber: user.phoneNumber,
         role: user.role
     };
+};
+
+export const logoutUser = (req) => {
+    return new Promise((resolve, reject)=> {
+        req.session.destroy((error) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve();
+        });
+    });
 };

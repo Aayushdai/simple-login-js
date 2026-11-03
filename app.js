@@ -3,6 +3,7 @@ import session from "express-session";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import logger from "./config/logger.js";
+import { errorHandler } from "./middleware/errorMiddleware.js";
 
 import { RedisStore } from "connect-redis";
 import { redisClient } from "./config/redis.js";
@@ -46,5 +47,7 @@ app.use(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+
+app.use(errorHandler);
 
 export default app;
