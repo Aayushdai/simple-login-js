@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { RedisStore } from "connect-redis";
 import { redisClient } from "./config/redis.js";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 
 dotenv.config();
@@ -34,5 +35,6 @@ store: new RedisStore({
 )
 
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 export default app;
