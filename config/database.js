@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize';
+import logger from './logger.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -17,6 +18,6 @@ export const sequelize = new Sequelize(
 export const connectionDB = async () => {
     
         await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
+        logger.info('Connection has been established successfully.');
     
 };

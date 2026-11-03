@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import app from './app.js';
+import logger from './config/logger.js';
 import {connectRedis} from './config/redis.js';
 import {connectionDB} from './config/database.js';
 
@@ -13,10 +14,10 @@ const startServer = async () => {
     await connectRedis();
 
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      logger.info(`Server is running on port ${PORT}`);
     });
   }catch (error) {
-    console.error('Error starting the server:', error.message);
+    logger.error('Error starting the server:', error.message);
     process.exit(1); // Exit the process with an error code
   }
 }

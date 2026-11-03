@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import { redisClient } from "../config/redis.js";
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js";
 
+
 export const registerUser = async (userData) => {
     const {
         firstName,

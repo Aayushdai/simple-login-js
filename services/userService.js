@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import  { redisClient } from '../config/redis.js';
-
+import logger from '../config/logger.js';
 
 export const getAllUsers = async () => {
 
@@ -10,14 +10,14 @@ export const getAllUsers = async () => {
         const cachedData = await redisClient.get(cacheKey);
 
         if(cachedData) {
-            console.log("Cache HIT");
+            logger.info("Cache HIT");
             return JSON.parse(cachedData);
         }
     }catch(error) {
-        console.error("Redis cache read error:", error.message);
+        logger.error("Redis cache read error:", error.message);
     }
 
-    console.log("Cache MISS");
+    logger.info("Cache MISS");
 
     const users = await User.findAll({
         attributes: [
@@ -41,9 +41,9 @@ export const getAllUsers = async () => {
             60,
             JSON.stringify(userData)
         );
-        console.log("Response cached successfully");
+        logger.info("Response cached successfully");
     }catch (error) {
-        console.error("Redis cache write error:", error.message);
+        logger.error("Redis cache write error:", error.message);
     }
     return userData;
     };

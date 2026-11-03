@@ -1,4 +1,5 @@
 import { getAllUsers} from '../services/userService.js';
+import logger from '../config/logger.js';
 
 export const getUsers = async (req, res) => {
     try {
@@ -9,7 +10,7 @@ export const getUsers = async (req, res) => {
             users
         });
     }catch (error) {
-        console.error('Error fetching users:', error.message);
+        logger.error('Error fetching users:', error.message);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }

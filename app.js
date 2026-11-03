@@ -1,6 +1,8 @@
 import express from "express";
 import session from "express-session";
 import dotenv from "dotenv";
+import morgan from "morgan";
+import logger from "./config/logger.js";
 
 import { RedisStore } from "connect-redis";
 import { redisClient } from "./config/redis.js";
@@ -12,6 +14,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+
 
 app.use(
     session({
@@ -33,6 +36,13 @@ store: new RedisStore({
         }
     })
 )
+app.use(
+    morgan("combined", {
+        stream: {
+            write: (message) => logger.http(message.trim())
+        }
+    })
+);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);

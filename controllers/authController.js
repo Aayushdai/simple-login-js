@@ -1,4 +1,5 @@
 import { registerUser, loginUser } from "../services/authService.js";
+import logger from "../config/logger.js";
 
 export const register = async (req,res) => {
     try {
@@ -62,7 +63,7 @@ export const login = async (req,res) => {
         
         });        
     } catch (error) {
-        console.error("Login error:", error);
+        logger.error("Login error:", error);
         return res.status(500).json({
             success: false,
             message: error.message
