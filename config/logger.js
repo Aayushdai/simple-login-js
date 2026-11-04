@@ -1,12 +1,11 @@
 import winston from "winston";
+import ElasticsearchTransport from './elasticsearchTransport.js';
 
 const logger = winston.createLogger({
     level: "http",
 
     format: winston.format.combine(
-        winston.format.timestamp({
-            format: "YYYY-MM-DD HH:mm:ss",
-        }),
+        winston.format.timestamp(),
         winston.format.errors({ stack: true}),
         winston.format.json()
     ),
@@ -21,6 +20,11 @@ const logger = winston.createLogger({
            
             new winston.transports.File({
             filename: "logs/combined.log",
+        }),
+
+        new ElasticsearchTransport({
+            level: "http",
+            index: "application-logs"
         })
     ]
 });
